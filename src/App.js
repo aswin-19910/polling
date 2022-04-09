@@ -1,5 +1,4 @@
 import "./App.css";
-import { useEffect } from "react";
 import React from "react";
 import { useForm } from "react-hook-form";
 const axios = require("axios");
