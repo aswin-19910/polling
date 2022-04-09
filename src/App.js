@@ -15,7 +15,6 @@ const Select = React.forwardRef(({ onChange, onBlur, name, label }, ref) => (
   </>
 ));
 
-
 const boys = [
   "Aswin",
   "Arivu",
@@ -76,35 +75,35 @@ function App() {
   const api = "https://api.strawpoll.com/v2/polls";
   const { register, handleSubmit } = useForm();
 
-  const postPolling = async(nameList,data) => {
-        const payload = {
-        type: "multiple_choice",
-        title: data.title,
-        poll_meta: { description: data.description, location: "" },
-        media: { path: null },
-        poll_options: nameList,
-        poll_config: {
-          is_private: 1,
-          allow_comments: 1,
-          is_multiple_choice: 0,
-          multiple_choice_min: null,
-          multiple_choice_max: null,
-          require_voter_names: 0,
-          duplication_checking: "ip",
-          deadline_at: null,
-          status: "draft",
-        },
-      };
-
-      const header = {
-        headers: {
-          "X-API-KEY": apiKey,
-        },
-      };
-
-      const response = await axios.post(api, payload, header);
-      console.log("Response", response);
+  const postPolling = async (nameList, data) => {
+    const payload = {
+      type: "multiple_choice",
+      title: data.title,
+      poll_meta: { description: data.description, location: "" },
+      media: { path: null },
+      poll_options: nameList,
+      poll_config: {
+        is_private: 1,
+        allow_comments: 1,
+        is_multiple_choice: 0,
+        multiple_choice_min: null,
+        multiple_choice_max: null,
+        require_voter_names: 0,
+        duplication_checking: "ip",
+        deadline_at: null,
+        status: "draft",
+      },
     };
+
+    const header = {
+      headers: {
+        "X-API-KEY": data.apiKey,
+      },
+    };
+
+    const response = await axios.post(api, payload, header);
+    console.log("Response", response);
+  };
 
   const getPollOption = (type) => {
     if (type === "boys") {
@@ -131,11 +130,17 @@ function App() {
 
   const onSubmit = (data) => {
     const pollOption = getPollOption(data.type);
-    postPolling(pollOption,data);
+    postPolling(pollOption, data);
   };
   return (
     <div className="App">
       <form onSubmit={handleSubmit(onSubmit)}>
+        <input
+          placeholder="Access token"
+          {...register("apiKey", { required: true })}
+          defaultValue={apiKey}
+        ></input>
+
         <input
           placeholder="Title"
           {...register("title", { required: true })}
